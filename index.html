@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yuvraj Gupta</title>
+<meta name="description" content="Yuvraj Gupta — Software Engineer at Ether. Backend systems by day, rovers and drones at heart.">
+<script>
+/* apply saved theme before first paint (no flash) */
+(function(){var t='dark',c='ember',v='software';
+try{t=localStorage.getItem('yg-theme')||t;c=localStorage.getItem('yg-accent')||c;v=localStorage.getItem('yg-view')||v}catch(e){}
+var q=new URLSearchParams(location.search).get('view');if(q==='robotics'||q==='software')v=q;
+var r=document.documentElement;
+r.setAttribute('data-theme',t==='system'?(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):t);
+r.setAttribute('data-accent',c);r.setAttribute('data-view',v);r.dataset.themePref=t;})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07080c; --bg2:#0d0f16; --card:#11141d; --line:#1f2431;
+  --text:#e9e6df; --muted:#8b8f9c; --dim:#5a5f6d;
+  --accent:#ff8a3d; --accent2:#5ee6c8; --accent-soft:rgba(var(--accent-rgb),.12);
+  --serif:'Instrument Serif',Georgia,serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --sans:'Inter',system-ui,sans-serif;
+  --accent-rgb:255,138,61; --accent2-rgb:94,230,200; --on-accent:#000;
+  --nav-bg:rgba(7,8,12,.72); --pill-bg:rgba(13,15,22,.6); --chip:#151925;
+  --c-star:255,255,255; --c-star-a:1; --c-ridge:#0c0f17; --c-tree1:#111622; --c-tree2:#0a0d14;
+  --c-g1:#141824; --c-g2:#07080c; --c-wheel:#11141d;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f6f3ec; --bg2:#efebe2; --card:#fffdf8; --line:#e2ddd1;
+  --text:#16181d; --muted:#585b65; --dim:#8a8d97; --on-accent:#fff;
+  --nav-bg:rgba(246,243,236,.78); --pill-bg:rgba(255,253,248,.75); --chip:#ece7dc;
+  --c-star:90,100,130; --c-star-a:.35; --c-ridge:#e8e3d6; --c-tree1:#dcd5c4; --c-tree2:#cbc3ae;
+  --c-g1:#ebe5d8; --c-g2:#f6f3ec; --c-wheel:#fffdf8;
+  color-scheme:light;
+}
+/* accent palettes (dark values, then light-mode values with more contrast) */
+:root[data-accent="ocean"]{--accent:#4da3ff;--accent-rgb:77,163,255;--accent2:#ffd166;--accent2-rgb:255,209,102}
+:root[data-accent="violet"]{--accent:#a78bfa;--accent-rgb:167,139,250;--accent2:#5ee6c8;--accent2-rgb:94,230,200}
+:root[data-accent="rose"]{--accent:#ff6b9a;--accent-rgb:255,107,154;--accent2:#7dd3fc;--accent2-rgb:125,211,252}
+:root[data-accent="lime"]{--accent:#a3e635;--accent-rgb:163,230,53;--accent2:#f472b6;--accent2-rgb:244,114,182}
+:root[data-theme="light"]{--accent:#d9601a;--accent-rgb:217,96,26;--accent2:#0e9479;--accent2-rgb:14,148,121}
+:root[data-theme="light"][data-accent="ocean"]{--accent:#1f6fd1;--accent-rgb:31,111,209;--accent2:#b7861a;--accent2-rgb:183,134,26}
+:root[data-theme="light"][data-accent="violet"]{--accent:#6d4ae0;--accent-rgb:109,74,224;--accent2:#0e9479;--accent2-rgb:14,148,121}
+:root[data-theme="light"][data-accent="rose"]{--accent:#d63a6d;--accent-rgb:214,58,109;--accent2:#1b86b8;--accent2-rgb:27,134,184}
+:root[data-theme="light"][data-accent="lime"]{--accent:#4d8a0c;--accent-rgb:77,138,12;--accent2:#c0397f;--accent2-rgb:192,57,127}
+body{transition:background-color .5s,color .5s}
+
+/* inline SVG art follows the theme */
+svg [fill="#ff8a3d"]{fill:var(--accent)} svg [stroke="#ff8a3d"],svg[stroke="#ff8a3d"]{stroke:var(--accent)}
+svg [fill="#5ee6c8"]{fill:var(--accent2)}
+svg [fill="#e9e6df"]{fill:var(--text)} svg [stroke="#e9e6df"]{stroke:var(--text)}
+svg [fill="#11141d"]{fill:var(--card)} svg [fill="#07080c"]{fill:var(--bg)} svg [fill="#0b0d13"]{fill:var(--bg2)}
+svg [stroke="#2a3040"]{stroke:var(--line)} svg [fill="#5a5f6d"]{fill:var(--dim)} svg [stroke="#5a5f6d"]{stroke:var(--dim)}
+
+/* theme picker */
+.nav-r{display:flex;gap:10px;align-items:center;position:relative}
+.nav-r .term-btn{white-space:nowrap}
+.view-switch > span{white-space:nowrap}
+@media (max-width:640px){
+  .term-btn .tlabel{display:none}
+  nav{padding-left:16px;padding-right:16px}
+  .hint span{white-space:normal;text-align:center;max-width:80vw}
+  nav .theme-pop{position:fixed;top:64px;right:16px;left:16px;width:auto}
+}
+.term-btn .sw-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:conic-gradient(var(--accent),var(--accent2),var(--accent));margin-right:8px;vertical-align:-1px}
+.theme-pop{position:absolute;top:calc(100% + 10px);right:0;width:250px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 24px 60px rgba(0,0,0,.35);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .2s;text-transform:none;letter-spacing:normal}
+.theme-pop.open{opacity:1;visibility:visible;transform:none}
+.tp-label{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin:2px 0 10px}
+.tp-label + .seg{margin-bottom:16px}
+.seg{display:flex;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button{flex:1;border:0;background:none;color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;cursor:pointer;transition:all .25s;white-space:nowrap}
+.seg button:hover{color:var(--text)}
+.seg button.on{background:var(--accent);color:var(--on-accent)}
+.swatches{display:flex;gap:10px}
+.swatches button{width:34px;height:34px;border-radius:50%;border:2px solid transparent;cursor:pointer;position:relative;transition:transform .2s;padding:0}
+.swatches button:hover{transform:scale(1.12)}
+.swatches button.on{border-color:var(--text)}
+.swatches button::after{content:"";position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;background:var(--sw2);border:2px solid var(--card)}
+.tp-name{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:10px}
+
+/* software / robotics view */
+.view-switch{display:flex;align-items:center;gap:12px;margin-top:28px;pointer-events:auto;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.view-switch .seg{background:var(--pill-bg);backdrop-filter:blur(6px)}
+:root[data-view="robotics"] .only-sw, :root:not([data-view="robotics"]) .only-rb{display:none!important}
+.swap{animation:swapIn .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes swapIn{from{opacity:0;transform:translateY(10px);filter:blur(4px)}}
+.timeline{display:flex;flex-direction:column}
+:root[data-view="robotics"] #job-ether{order:9}
+:root[data-view="robotics"] .sk-robo{order:-1}
+.skill-grid .sk{display:block}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:var(--on-accent)}
+body::after{ /* film grain */
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:200;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- loader ---------- */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:300;display:flex;flex-direction:column;justify-content:flex-end;padding:8vh 8vw;transition:opacity .8s ease, visibility .8s}
+#loader.done{opacity:0;visibility:hidden}
+#loader .lname{font-family:var(--serif);font-size:clamp(40px,7vw,96px);line-height:1}
+#loader .lbar{height:1px;background:var(--line);margin:24px 0 12px;position:relative;overflow:hidden}
+#loader .lbar i{position:absolute;inset:0;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+#loader .lmeta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+
+/* ---------- cursor ---------- */
+.cursor{position:fixed;top:0;left:0;width:34px;height:34px;border:1px solid rgba(255,255,255,.5);border-radius:50%;pointer-events:none;z-index:250;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s,border-color .25s;mix-blend-mode:difference}
+.cursor.big{width:70px;height:70px;background:#fff;border-color:#fff}
+.cursor-dot{position:fixed;top:0;left:0;width:5px;height:5px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:251;transform:translate(-50%,-50%)}
+@media (hover:none){.cursor,.cursor-dot{display:none}}
+
+/* ---------- nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:22px 5vw;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;transition:background .4s, padding .4s}
+nav.scrolled{background:var(--nav-bg);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:14px 5vw;border-bottom:1px solid var(--line)}
+nav .logo{display:flex;align-items:center;gap:10px}
+nav .logo b{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2s infinite}
+nav ul{display:flex;gap:28px;list-style:none}
+nav ul a{color:var(--muted);transition:color .2s;position:relative}
+nav ul a:hover,nav ul a.active{color:var(--text)}
+nav ul a.active::before{content:"";position:absolute;left:-12px;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--accent)}
+.term-btn{border:1px solid var(--line);padding:7px 12px;border-radius:999px;color:var(--muted);background:none;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;transition:all .2s}
+.term-btn:hover{color:var(--text);border-color:var(--accent)}
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:101;width:0}
+@keyframes pulse{50%{opacity:.35}}
+@media (max-width:820px){nav ul{display:none}}
+
+/* ---------- hero ---------- */
+#hero{position:relative;height:100vh;min-height:620px;overflow:hidden}
+#sky{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 16px 22vh;pointer-events:none}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:7px 16px;background:var(--pill-bg);backdrop-filter:blur(6px);display:inline-flex;gap:10px;align-items:center}
+.pill i{width:6px;height:6px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2)}
+.hero-name{font-family:var(--serif);font-weight:400;font-size:clamp(64px,13vw,190px);line-height:.92;letter-spacing:-.02em;margin:22px 0 18px}
+.hero-name span{display:inline-block;opacity:0;transform:translateY(40px) rotate(4deg);filter:blur(8px)}
+.ready .hero-name span{animation:rise 1s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none;filter:none}}
+.hero-name em{font-style:italic;color:var(--accent)}
+.hero-sub{max-width:560px;color:var(--muted);font-size:clamp(15px,1.6vw,18px)}
+.hero-sub b{color:var(--text);font-weight:500}
+.fade{opacity:0;transform:translateY(14px);transition:opacity 1s ease, transform 1s ease}
+.ready .fade{opacity:1;transform:none}
+.hud{position:absolute;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;line-height:1.9;pointer-events:none}
+.hud b{color:var(--accent2);font-weight:400}
+.hud.tl{top:90px;left:5vw}.hud.tr{top:90px;right:5vw;text-align:right}
+.hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:10px;white-space:nowrap}
+.hint .mouse{width:18px;height:28px;border:1px solid var(--muted);border-radius:10px;position:relative}
+.hint .mouse::after{content:"";position:absolute;left:50%;top:6px;width:2px;height:6px;margin-left:-1px;background:var(--accent);border-radius:2px;animation:scrolly 1.6s infinite}
+@keyframes scrolly{0%{opacity:0;transform:translateY(0)}40%{opacity:1}100%{opacity:0;transform:translateY(8px)}}
+@media (max-width:640px){.hud{display:none}}
+
+/* ---------- sections ---------- */
+section{position:relative;padding:140px 5vw;max-width:1280px;margin:0 auto}
+.sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:64px;flex-wrap:wrap}
+.sec-num{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.15em}
+.sec-title{font-family:var(--serif);font-weight:400;font-size:clamp(44px,6vw,80px);line-height:1;letter-spacing:-.01em}
+.sec-title em{color:var(--muted)}
+.sec-line{flex:1;height:1px;background:var(--line);min-width:40px;align-self:center;transform-origin:left;transform:scaleX(0);transition:transform 1.4s cubic-bezier(.2,.8,.2,1)}
+.in .sec-line,.sec-head.in .sec-line{transform:scaleX(1)}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 1s ease, transform 1s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* about */
+.about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:80px}
+.about-lead{font-family:var(--serif);font-size:clamp(26px,3vw,38px);line-height:1.25}
+.about-lead em{color:var(--accent)}
+.about-text p{color:var(--muted);margin-top:22px;max-width:620px}
+.about-text p b{color:var(--text);font-weight:500}
+.facts{border-top:1px solid var(--line)}
+.fact{display:flex;justify-content:space-between;gap:20px;padding:16px 0;border-bottom:1px solid var(--line);font-size:14px}
+.fact span:first-child{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);padding-top:3px}
+.fact span:last-child{text-align:right}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:90px;border-radius:14px;overflow:hidden}
+.stat{background:var(--bg);padding:34px 26px}
+.stat .n{font-family:var(--serif);font-size:clamp(44px,5vw,68px);line-height:1}
+.stat .n sup{font-size:.45em;color:var(--accent);margin-left:2px}
+.stat .l{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:10px}
+@media (max-width:900px){.about-grid{grid-template-columns:1fr;gap:50px}.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* experience timeline */
+.timeline{position:relative;padding-left:60px}
+.timeline .track{position:absolute;left:14px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.timeline .track i{position:absolute;left:0;top:0;width:1px;background:linear-gradient(var(--accent),var(--accent2));height:0}
+.timeline .bot{position:absolute;left:14px;top:0;width:26px;height:26px;margin-left:-13px;border-radius:50%;background:var(--bg);border:1px solid var(--accent);display:grid;place-items:center;box-shadow:0 0 22px rgba(var(--accent-rgb),.4);z-index:2}
+.timeline .bot svg{width:14px;height:14px}
+.job{position:relative;padding:0 0 70px}
+.job::before{content:"";position:absolute;left:-50px;top:10px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1px solid var(--dim);transition:all .4s}
+.job.lit::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 14px var(--accent)}
+.job-top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline}
+.job h3{font-family:var(--serif);font-weight:400;font-size:clamp(28px,3.2vw,42px);line-height:1.1}
+.job h3 a{background:linear-gradient(var(--accent),var(--accent)) left bottom/0 1px no-repeat;transition:background-size .4s}
+.job h3 a:hover{background-size:100% 1px}
+.job h3 a::after{content:" ↗";font-size:.55em;color:var(--accent);vertical-align:super}
+.job .when{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.08em}
+.job .role{font-family:var(--mono);font-size:12px;color:var(--accent2);letter-spacing:.06em;margin:6px 0 16px}
+.job ul{list-style:none;color:var(--muted);max-width:760px}
+.job li{position:relative;padding-left:22px;margin-bottom:8px}
+.job li::before{content:"→";position:absolute;left:0;color:var(--dim)}
+.job li b{color:var(--text);font-weight:500}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{font-family:var(--mono);font-size:11px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;color:var(--muted);transition:all .2s}
+.tag:hover{color:var(--accent);border-color:var(--accent)}
+@media (max-width:640px){.timeline{padding-left:40px}.job::before{left:-30px}}
+
+/* projects */
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.proj{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:34px;overflow:hidden;transform-style:preserve-3d;transition:transform .2s ease-out, border-color .3s;min-height:340px;display:flex;flex-direction:column}
+.proj::before{content:"";position:absolute;inset:0;background:radial-gradient(500px circle at var(--mx,50%) var(--my,50%),rgba(var(--accent-rgb),.13),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
+.proj:hover{border-color:var(--dim)}
+.proj:hover::before{opacity:1}
+.proj.wide{grid-column:span 2}
+.proj .ptop{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+.proj .art{height:120px;margin:22px 0 10px;position:relative}
+.proj .art svg{width:100%;height:100%;overflow:visible}
+.proj h3{font-family:var(--serif);font-weight:400;font-size:clamp(28px,2.6vw,36px);line-height:1.1;margin-bottom:12px}
+.proj p{color:var(--muted);font-size:15px;flex:1}
+.proj .metrics{display:flex;gap:28px;margin:22px 0 4px;flex-wrap:wrap}
+.proj .metrics div{font-family:var(--serif);font-size:30px;line-height:1}
+.proj .metrics small{display:block;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
+.proj .go{position:absolute;top:28px;right:28px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:all .3s;z-index:2}
+.proj:hover .go{background:var(--accent);border-color:var(--accent);color:var(--on-accent);transform:rotate(-45deg)}
+.proj .ptop{padding-right:56px}
+@media (max-width:860px){.proj-grid{grid-template-columns:1fr}.proj.wide{grid-column:auto}}
+
+/* skills */
+.marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;margin:0 -5vw 70px;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.marquee .row{display:flex;gap:46px;width:max-content;animation:slide 40s linear infinite;font-family:var(--serif);font-size:clamp(34px,4.4vw,58px);white-space:nowrap}
+.marquee .row span:nth-child(even){font-style:italic;color:var(--dim)}
+.marquee .row span.star{color:var(--accent);font-style:normal}
+.marquee:hover .row{animation-play-state:paused}
+@keyframes slide{to{transform:translateX(-50%)}}
+.skill-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.sk{border:1px solid var(--line);border-radius:18px;padding:28px;background:linear-gradient(180deg,var(--bg2),var(--bg))}
+.sk h4{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:14px;padding:8px 14px;border-radius:10px;background:var(--chip);border:1px solid var(--line);transition:transform .25s cubic-bezier(.3,1.6,.5,1), background .25s, color .25s;cursor:default}
+.chip:hover{transform:translateY(-4px) rotate(-2deg);background:var(--accent);color:var(--on-accent)}
+.course{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.course ul{list-style:none}
+.course li{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--muted)}
+.course li a{color:var(--text)}
+.course li a:hover{color:var(--accent)}
+.course li code{font-family:var(--mono);font-size:11px;color:var(--dim)}
+@media (max-width:900px){.skill-grid,.course{grid-template-columns:1fr}}
+
+/* log */
+.log{border-top:1px solid var(--line)}
+.log-item{display:grid;grid-template-columns:120px 1fr auto;gap:30px;align-items:center;padding:26px 0;border-bottom:1px solid var(--line);position:relative;transition:padding .35s}
+.log-item::before{content:"";position:absolute;inset:0;background:var(--accent-soft);transform:scaleY(0);transform-origin:bottom;transition:transform .35s ease;z-index:-1}
+.log-item:hover{padding-left:18px}
+.log-item:hover::before{transform:scaleY(1)}
+.log-item .k{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase}
+.log-item .t{font-family:var(--serif);font-size:clamp(22px,2.4vw,30px);line-height:1.2}
+.log-item .t small{display:block;font-family:var(--sans);font-size:14px;color:var(--muted);margin-top:4px}
+.log-item .badge{font-family:var(--mono);font-size:11px;color:var(--accent);border:1px solid rgba(var(--accent-rgb),.35);padding:5px 10px;border-radius:999px;white-space:nowrap}
+@media (max-width:700px){.log-item{grid-template-columns:1fr;gap:8px}.log-item .badge{justify-self:start}}
+
+/* contact */
+#contact{text-align:center;padding-top:160px;padding-bottom:120px}
+.big-cta{font-family:var(--serif);font-size:clamp(50px,9vw,140px);line-height:.95;letter-spacing:-.02em}
+.big-cta em{color:var(--accent)}
+.mail{display:inline-flex;align-items:center;gap:14px;margin-top:46px;font-family:var(--mono);font-size:clamp(14px,1.8vw,18px);padding:18px 30px;border:1px solid var(--line);border-radius:999px;background:var(--card);cursor:pointer;transition:all .3s;color:var(--text)}
+.mail:hover{border-color:var(--accent);box-shadow:0 0 40px rgba(var(--accent-rgb),.2)}
+.mail .cp{font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.socials{display:flex;justify-content:center;gap:12px;margin-top:30px;flex-wrap:wrap}
+.socials a{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:12px 20px;border-radius:999px;border:1px solid var(--line);color:var(--muted);transition:all .25s}
+.socials a:hover{color:var(--bg);background:var(--text);border-color:var(--text)}
+footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:30px 5vw;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+
+/* terminal */
+#term{position:fixed;inset:0;z-index:150;background:rgba(3,4,7,.6);backdrop-filter:blur(8px);display:grid;place-items:center;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;padding:16px}
+#term.open{opacity:1;visibility:visible}
+.tw{width:min(720px,100%);height:min(460px,80vh);background:#0b0d13;border:1px solid #1f2431;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 40px 120px rgba(0,0,0,.6);transform:translateY(16px) scale(.98);transition:transform .3s}
+#term.open .tw{transform:none}
+.tw-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid #1f2431;font-family:var(--mono);font-size:11px;color:#5a5f6d}
+.tw-bar i{width:11px;height:11px;border-radius:50%;background:#2a2f3c}
+.tw-bar i:first-child{background:#ff5f57;cursor:pointer}
+.tw-bar span{margin-left:auto}
+.tw-body{flex:1;overflow:auto;padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.7;color:#c9ccd4}
+.tw-body .p{color:var(--accent2)}
+.tw-body .a{color:var(--accent)}
+.tw-body .m{color:var(--dim)}
+.tw-body a{color:var(--accent);text-decoration:underline}
+.tw-in{display:flex;gap:8px;padding:12px 18px;border-top:1px solid #1f2431;font-family:var(--mono);font-size:13px}
+.tw-in span{color:var(--accent2)}
+.tw-in input{flex:1;background:none;border:0;outline:0;color:#e9e6df;font:inherit;caret-color:var(--accent)}
+
+/* tilt mode (phone IMU) */
+.motion-pill{position:fixed;left:16px;bottom:16px;z-index:120;display:none;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:var(--pill-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--muted);cursor:pointer;transition:all .25s}
+.motion-pill.show{display:inline-flex}
+.motion-pill.on{color:var(--on-accent);background:var(--accent);border-color:var(--accent)}
+.motion-pill i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.motion-pill.on i{animation:pulse 1.2s infinite}
+
+/* toast */
+.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,30px);background:var(--text);color:var(--bg);font-family:var(--mono);font-size:12px;padding:10px 18px;border-radius:999px;opacity:0;transition:all .35s;z-index:260;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal,.fade,.hero-name span{opacity:1!important;transform:none!important;filter:none!important}
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="lname">Yuvraj Gupta</div>
+  <div class="lbar"><i></i></div>
+  <div class="lmeta"><span id="lmsg">Booting systems</span><span id="lpct">000</span></div>
+</div>
+
+<div class="cursor"></div><div class="cursor-dot"></div>
+<div id="progress"></div>
+
+<nav id="nav">
+  <a href="#hero" class="logo"><b></b>Yuvraj</a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#log">Log</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-r">
+    <button class="term-btn" id="themeBtn" aria-haspopup="true" aria-expanded="false"><span class="sw-dot"></span>Theme</button>
+    <button class="term-btn" id="termBtn" title="Open terminal ( / )" aria-label="Open terminal">&gt;_<span class="tlabel"> Terminal</span></button>
+    <div class="theme-pop" id="themePop" role="dialog" aria-label="Theme settings">
+      <div class="tp-label">Mode</div>
+      <div class="seg" id="modeSeg"><button data-t="dark">Dark</button><button data-t="light">Light</button><button data-t="system">Auto</button></div>
+      <div class="tp-label">Accent colour</div>
+      <div class="swatches" id="swatches"></div>
+      <div class="tp-name" id="swName"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header id="hero">
+  <canvas id="sky"></canvas>
+  <div class="hud tl">
+    <div>Rover · <b id="hx">0000</b> m</div>
+    <div>Slope · <b id="hs">00</b>°</div>
+    <div>Speed · <b id="hv">0.0</b> m/s</div>
+  </div>
+  <div class="hud tr">
+    <div>UAV alt · <b id="ha">000</b> m</div>
+    <div>Link · <b>RF OK</b></div>
+    <div>Mumbai · <b id="clock">--:--</b> IST</div>
+  </div>
+  <div class="hero-inner">
+    <div class="pill fade" style="transition-delay:.9s"><i></i><span class="only-sw vs">Software Engineer @ Ether · Mumbai</span><span class="only-rb vs">Robotics · Rovers · UAVs · SLAM</span></div>
+    <h1 class="hero-name"><span style="animation-delay:.15s">Yuvraj</span> <span style="animation-delay:.3s"><em>Gupta</em></span></h1>
+    <p class="hero-sub fade" style="transition-delay:1.1s"><span class="only-sw vs">I build <b>backends that schools run on</b> — and, before that, <b>rovers that climb 45° slopes</b> and drones that guide them home.</span><span class="only-rb vs">I build <b>rovers that climb 45° slopes</b>, <b>drones that guide them</b>, and the SLAM and control that keeps them upright in the wild.</span></p>
+    <div class="view-switch fade" style="transition-delay:1.25s"><span>View as</span><div class="seg" id="viewSeg"><button data-v="software">Software</button><button data-v="robotics">Robotics</button></div></div>
+  </div>
+  <div class="hint fade" style="transition-delay:1.4s"><span>Click the terrain to drop a waypoint</span><div class="mouse"></div></div>
+</header>
+
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="sec-head reveal"><span class="sec-num">01</span><h2 class="sec-title">About <em>me</em></h2><span class="sec-line"></span></div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p class="about-lead only-sw vs">A mechanical engineer who fell for <em>code</em> — by way of rovers, drones, and a lot of SLAM.</p>
+      <p class="about-lead only-rb vs">A mechanical engineer who makes machines <em>move on their own</em> — over rocks, through forests, and from the sky.</p>
+      <p class="only-rb vs">My robotics work spans the full stack: <b>mechanical design</b> (a 3D-printed triple-bogie rover), <b>perception</b> (visual-inertial SLAM, RTAB-Map point clouds, RealSense detection), <b>control</b> (nonlinear and bio-inspired controllers) and <b>simulation</b> (Gazebo, PX4 SITL, Unity forest worlds).</p>
+      <p>I studied <b>Mechanical Engineering at VNIT Nagpur</b>, but spent most of my time in labs: building a six-wheeled rover for ISRO's robotics challenge, writing visual-inertial SLAM pipelines for UAVs at <b>IIIT Hyderabad</b>, and simulating forest-crawling rovers for the <b>University of Southampton</b>.</p>
+      <p>Today I'm a <b>Software Engineer at Ether</b>, working on <b>ether-be</b> — the backend of a school-management platform — across schemas, services, APIs and the transformer layers that feed the frontend. Same instinct as robotics: make systems that are robust when the terrain gets rough.</p>
+    </div>
+    <div class="facts reveal" style="transition-delay:.15s">
+      <div class="fact"><span>Now</span><span>Software Engineer, Ether</span></div>
+      <div class="fact"><span>Based</span><span>Mumbai, India</span></div>
+      <div class="fact"><span>Studied</span><span>B.Tech Mechanical Engg.<br>VNIT Nagpur · 2022–26</span></div>
+      <div class="fact"><span>Research</span><span>IIIT Hyderabad RRC<br>Univ. of Southampton</span></div>
+      <div class="fact"><span>Also</span><span>IvLabs member · mentor to 15</span></div>
+    </div>
+  </div>
+  <div class="stats reveal">
+    <div class="stat"><div class="n" data-count="45">0<sup>°</sup></div><div class="l">Slope our rover climbed</div></div>
+    <div class="stat"><div class="n" data-count="0.1" data-pre="top " data-dec="1">0<sup>%</sup></div><div class="l">Google Cloud Gen-AI comp</div></div>
+    <div class="stat"><div class="n" data-count="95">0<sup>%</sup></div><div class="l">Iris-tracking accuracy</div></div>
+    <div class="stat"><div class="n" data-count="15">0<sup>+</sup></div><div class="l">Juniors mentored</div></div>
+  </div>
+</section>
+
+<!-- ================= EXPERIENCE ================= -->
+<section id="experience">
+  <div class="sec-head reveal"><span class="sec-num">02</span><h2 class="sec-title"><span class="only-sw">Work <em>&amp; research</em></span><span class="only-rb">Research <em>&amp; work</em></span></h2><span class="sec-line"></span></div>
+  <div class="timeline" id="timeline">
+    <div class="track"><i id="trackFill"></i></div>
+    <div class="bot" id="tbot"><svg viewBox="0 0 24 24" fill="none" stroke="#ff8a3d" stroke-width="2"><rect x="4" y="7" width="16" height="7" rx="1.5"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M15 7V3h3"/></svg></div>
+
+    <article class="job reveal" id="job-ether">
+      <div class="job-top"><h3><a href="https://www.joinether.in/" target="_blank" rel="noopener">Ether</a></h3><span class="when">Jun '26 — Present</span></div>
+      <div class="role">Software Engineer · Mumbai, India</div>
+      <ul>
+        <li>Working on <b>ether-be</b>, the core backend of the school-management platform, built on <b>Node.js, MongoDB and Docker</b>.</li>
+        <li>Contributing across the data pipeline — from database schema and service logic to API design and the transformer layers feeding the frontend.</li>
+      </ul>
+      <div class="tags"><span class="tag">Node.js</span><span class="tag">MongoDB</span><span class="tag">Docker</span><span class="tag">API design</span></div>
+    </article>
+
+    <article class="job reveal">
+      <div class="job-top"><h3><a href="https://drive.google.com/drive/folders/1ckfS7L_fmy84QtB6prx_o58LaNHFKvag?usp=sharing" target="_blank" rel="noopener">Resilient Mobility of Rovers in Forests</a></h3><span class="when">Dec '24 — Present</span></div>
+      <div class="role">University of Southampton, UK · with Dr. Danesh Tarapore</div>
+      <ul>
+        <li>Building a high-fidelity <b>Unity</b> simulation of forest terrain to test rover mobility over uneven ground, varying tree density and obstacles.</li>
+        <li>Implementing <b>bio-inspired control strategies</b> drawn from natural locomotion to improve adaptability and terrain resilience.</li>
+      </ul>
+      <div class="tags"><span class="tag">Unity</span><span class="tag">Simulation</span><span class="tag">Bio-inspired control</span></div>
+    </article>
+
+    <article class="job reveal">
+      <div class="job-top"><h3><a href="https://drive.google.com/drive/folders/1IgQF0m1PXS7_W5ZsdKrFMT2jVQ8iUgPq?usp=drive_link" target="_blank" rel="noopener">IIIT Hyderabad</a></h3><span class="when">Feb '25 — Jul '25</span></div>
+      <div class="role">Robotics Research Center · with Dr. Madhava Krishna</div>
+      <ul>
+        <li>Developed <b>nonlinear control algorithms</b> and <b>visual-inertial SLAM</b> perception pipelines for autonomous UAV navigation.</li>
+        <li>Performed intrinsic camera calibration with <b>TartanCalib</b> for trajectory optimisation.</li>
+      </ul>
+      <div class="tags"><span class="tag">VI-SLAM</span><span class="tag">Nonlinear control</span><span class="tag">UAVs</span><span class="tag">TartanCalib</span></div>
+    </article>
+
+    <article class="job reveal">
+      <div class="job-top"><h3><a href="https://github.com/guptuv/Micro-Temp-Humidity-Controller" target="_blank" rel="noopener">IvLabs, VNIT</a></h3><span class="when">Aug '23 — Oct '23</span></div>
+      <div class="role">Summer Research Intern · with Dr. Shital Chiddarwar</div>
+      <ul>
+        <li>Built a microcontroller-based temperature &amp; humidity controller with <b>Arduino</b>, a DHT sensor and an OLED display — <b>95% accuracy</b> at <b>0.57 s</b> latency.</li>
+      </ul>
+      <div class="tags"><span class="tag">Arduino</span><span class="tag">Embedded</span><span class="tag">Sensors</span></div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section id="projects">
+  <div class="sec-head reveal"><span class="sec-num">03</span><h2 class="sec-title">Selected <em>projects</em></h2><span class="sec-line"></span></div>
+  <div class="proj-grid">
+
+    <a class="proj wide reveal" href="https://drive.google.com/drive/folders/1tjRJOG3E56KMojQjYXq6atTSpQxpvcAd" target="_blank" rel="noopener">
+      <div class="go">↗</div>
+      <div class="ptop"><span>01 · ISRO IRoC-U 2024</span><span>Dec '23 — May '24</span></div>
+      <div class="art">
+        <svg viewBox="0 0 600 120" preserveAspectRatio="xMidYMid meet">
+          <path id="roverPath" d="M0 110 Q120 106 220 76 T420 46 T600 36" stroke="#5a5f6d" fill="none" stroke-width="1.5" stroke-dasharray="1 0" opacity=".7"/>
+          <g id="roverCard" transform="translate(150,96)">
+            <!-- origin = ground contact point; wheels sit exactly on the path -->
+            <path d="M-24 -8 L-12 -21 L0 -8 M-12 -21 L24 -8" stroke="#e9e6df" stroke-width="2" fill="none" stroke-linejoin="round"/>
+            <rect x="-28" y="-33" width="52" height="11" rx="3" fill="#ff8a3d"/>
+            <rect x="-28" y="-36" width="30" height="3" rx="1" fill="#5a5f6d"/>
+            <path d="M14 -33 V-48 h6" stroke="#e9e6df" stroke-width="2" fill="none"/>
+            <rect x="18" y="-53" width="11" height="7" rx="2" fill="#5ee6c8"/>
+            <g transform="translate(-24,-8)"><g class="wheel"><circle r="8" fill="#11141d" stroke="#e9e6df" stroke-width="2"/><path d="M-5 0 H5 M0 -5 V5" stroke="#5a5f6d" stroke-width="1.5"/></g></g>
+            <g transform="translate(0,-8)"><g class="wheel"><circle r="8" fill="#11141d" stroke="#e9e6df" stroke-width="2"/><path d="M-5 0 H5 M0 -5 V5" stroke="#5a5f6d" stroke-width="1.5"/></g></g>
+            <g transform="translate(24,-8)"><g class="wheel"><circle r="8" fill="#11141d" stroke="#e9e6df" stroke-width="2"/><path d="M-5 0 H5 M0 -5 V5" stroke="#5a5f6d" stroke-width="1.5"/></g></g>
+          </g>
+          <text x="560" y="110" fill="#5a5f6d" font-family="JetBrains Mono" font-size="11" text-anchor="end">45° · 5 m/s</text>
+        </svg>
+      </div>
+      <h3>Six-wheeled triple-bogie rover &amp; manipulator</h3>
+      <p>Designed and built a rover for unknown-terrain navigation for ISRO's URSC robotics challenge — 3D-printed parts, NVIDIA Jetson Nano and RPi-3 compute, Intel RealSense for object detection and motor control.</p>
+      <div class="metrics"><div>5 m/s<small>Top speed</small></div><div>45°<small>Slope climb</small></div><div>Finals<small>Gujarat Robofest</small></div></div>
+    </a>
+
+    <a class="proj reveal" href="https://drive.google.com/drive/folders/1FkpOT0EtBhdCjhXekMyQlCR0KQE0UC_S?usp=drive_link" target="_blank" rel="noopener">
+      <div class="go">↗</div>
+      <div class="ptop"><span>02 · Multi-robot</span><span>Jan — May '24</span></div>
+      <div class="art">
+        <svg viewBox="0 0 300 120">
+          <g fill="#5a5f6d"><circle cx="40" cy="100" r="1.5"/><circle cx="70" cy="90" r="1.5"/><circle cx="100" cy="104" r="1.5"/><circle cx="200" cy="96" r="1.5"/><circle cx="240" cy="102" r="1.5"/><circle cx="260" cy="88" r="1.5"/><circle cx="130" cy="92" r="1.5"/><circle cx="170" cy="106" r="1.5"/></g>
+          <path d="M150 30 L110 104 L190 104 Z" style="fill:rgba(var(--accent2-rgb),.08);stroke:rgba(var(--accent2-rgb),.35)" stroke-dasharray="3 4"/>
+          <g transform="translate(150,26)"><rect x="-10" y="-4" width="20" height="8" rx="2" fill="#5ee6c8"/><path d="M-22 -4 h44" stroke="#e9e6df" stroke-width="2"/><ellipse cx="-22" cy="-7" rx="10" ry="2" fill="#e9e6df" opacity=".6"/><ellipse cx="22" cy="-7" rx="10" ry="2" fill="#e9e6df" opacity=".6"/></g>
+          <g transform="translate(150,100)"><rect x="-14" y="-10" width="28" height="9" rx="2" fill="#ff8a3d"/><circle cx="-9" cy="2" r="4" fill="#11141d" stroke="#e9e6df" stroke-width="1.5"/><circle cx="9" cy="2" r="4" fill="#11141d" stroke="#e9e6df" stroke-width="1.5"/></g>
+        </svg>
+      </div>
+      <h3>Aerial-guided navigation of a ground robot</h3>
+      <p>Autonomous drone–rover collaboration in Gazebo-ROS with PX4 and QGroundControl. 3D point clouds via RTAB-Map and an Astra depth camera; RF telemetry for real-time comms and path-finding.</p>
+      <div class="tags"><span class="tag">ROS</span><span class="tag">Gazebo</span><span class="tag">PX4</span><span class="tag">RTAB-Map</span></div>
+    </a>
+
+    <a class="proj reveal" href="https://github.com/guptuv/Ocular-Mouse" target="_blank" rel="noopener" id="eyeCard">
+      <div class="go">↗</div>
+      <div class="ptop"><span>03 · Computer vision</span><span>Oct — Nov '23</span></div>
+      <div class="art">
+        <svg viewBox="0 0 300 120">
+          <g id="eyes">
+            <g transform="translate(115,60)"><path d="M-40 0 Q0 -36 40 0 Q0 36 -40 0Z" fill="#11141d" stroke="#e9e6df" stroke-width="1.5"/><g class="iris"><circle r="15" fill="#5ee6c8" opacity=".25"/><circle r="10" fill="#5ee6c8"/><circle r="4.5" fill="#07080c"/></g></g>
+            <g transform="translate(205,60)"><path d="M-40 0 Q0 -36 40 0 Q0 36 -40 0Z" fill="#11141d" stroke="#e9e6df" stroke-width="1.5"/><g class="iris"><circle r="15" fill="#5ee6c8" opacity=".25"/><circle r="10" fill="#5ee6c8"/><circle r="4.5" fill="#07080c"/></g></g>
+          </g>
+        </svg>
+      </div>
+      <h3>Ocular Mouse — hands-free cursor</h3>
+      <p>Real-time eye tracking with MediaPipe FaceMesh: iris tracking and facial-landmark mapping driving the cursor through pyautogui. (Yes — those eyes are following you.)</p>
+      <div class="metrics"><div>95%<small>Iris accuracy</small></div></div>
+    </a>
+
+    <a class="proj reveal" href="https://github.com/guptuv/Micro-Temp-Humidity-Controller" target="_blank" rel="noopener">
+      <div class="go">↗</div>
+      <div class="ptop"><span>04 · Embedded</span><span>Aug — Oct '23</span></div>
+      <div class="art">
+        <svg viewBox="0 0 300 120">
+          <rect x="60" y="20" width="180" height="80" rx="8" fill="#0b0d13" stroke="#2a3040"/>
+          <text x="80" y="55" fill="#5ee6c8" font-family="JetBrains Mono" font-size="20" id="tempTxt">24.6°C</text>
+          <text x="80" y="82" fill="#ff8a3d" font-family="JetBrains Mono" font-size="14" id="humTxt">RH 58%</text>
+          <polyline id="spark" fill="none" stroke="#5a5f6d" stroke-width="1.5" points=""/>
+        </svg>
+      </div>
+      <h3>Micro temp &amp; humidity controller</h3>
+      <p>Arduino + DHT sensor + OLED. Closed-loop control with 95% accuracy at 0.57 s latency.</p>
+      <div class="metrics"><div>0.57s<small>Latency</small></div><div>95%<small>Accuracy</small></div></div>
+    </a>
+
+    <a class="proj reveal" href="https://linktr.ee/Side_Projects_Yuvraj" target="_blank" rel="noopener">
+      <div class="go">↗</div>
+      <div class="ptop"><span>05 · Everything else</span><span>Ongoing</span></div>
+      <div class="art">
+        <svg viewBox="0 0 300 120"><g font-family="Instrument Serif" font-size="64" fill="none" stroke="#2a3040"><text x="150" y="88" text-anchor="middle" fill="#11141d" stroke="#ff8a3d" stroke-width="1">{ … }</text></g></svg>
+      </div>
+      <h3>Side projects</h3>
+      <p>Smaller experiments, hackathon builds and things I tinkered with on weekends — collected in one place.</p>
+    </a>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section id="skills">
+  <div class="sec-head reveal"><span class="sec-num">04</span><h2 class="sec-title">Toolkit</h2><span class="sec-line"></span></div>
+  <div class="marquee"><div class="row" id="mrow"></div></div>
+  <div class="skill-grid">
+    <div class="sk reveal"><h4>Programming</h4><div class="chips"><span class="chip">Python</span><span class="chip">C / C++</span><span class="chip">Java</span><span class="chip">Node.js</span><span class="chip">Unity</span><span class="chip">Git</span><span class="chip">LaTeX</span></div></div>
+    <div class="sk reveal sk-robo" style="transition-delay:.1s"><h4><span class="only-sw">Software &amp; Infra</span><span class="only-rb">Robotics stack</span></h4><div class="chips"><span class="chip">ROS</span><span class="chip">Gazebo</span><span class="chip">PX4</span><span class="chip">ArduPilot</span><span class="chip">Fusion 360</span><span class="chip">Docker</span><span class="chip">MongoDB</span></div></div>
+    <div class="sk reveal" style="transition-delay:.2s"><h4>Libraries</h4><div class="chips"><span class="chip">OpenCV</span><span class="chip">TensorFlow</span><span class="chip">MediaPipe</span><span class="chip">Matplotlib</span><span class="chip">PyAutoGUI</span></div></div>
+  </div>
+  <div class="course">
+    <div class="sk reveal"><h4>Coursework · VNIT</h4><ul>
+      <li>Integral Transforms &amp; PDEs <code>MAL201</code></li>
+      <li>Industrial Robotics <code>MEL417</code></li>
+      <li>Theory of Machines <code>MEL201</code></li>
+    </ul></div>
+    <div class="sk reveal" style="transition-delay:.1s"><h4>Online</h4><ul>
+      <li><a href="https://www.coursera.org/learn/robotics-flight" target="_blank" rel="noopener">Aerial Robotics ↗</a><code>UPenn</code></li>
+      <li><a href="https://www.udemy.com/course/100-days-of-code/" target="_blank" rel="noopener">100 Days of Code ↗</a><code>Angela Yu</code></li>
+      <li><a href="https://www.udacity.com/course/computer-vision-nanodegree--nd891" target="_blank" rel="noopener">Computer Vision ↗</a><code>Udacity</code></li>
+      <li><a href="https://drive.google.com/file/d/1mSB9qt8Iopp58aaCyJE4hOMLyvElGl8u/view?usp=sharing" target="_blank" rel="noopener">Optimization Methods, Energy Subsystems ↗</a><code>Denmark</code></li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- ================= LOG ================= -->
+<section id="log">
+  <div class="sec-head reveal"><span class="sec-num">05</span><h2 class="sec-title">Mission <em>log</em></h2><span class="sec-line"></span></div>
+  <div class="log">
+    <div class="log-item reveal"><span class="k">2024</span><div class="t">IRoC-U 2024 &amp; Gujarat Robofest<small>Qualified ISRO's IRoC-U round 1 and reached the Robofest finals in the rover category.</small></div><span class="badge">Finalist</span></div>
+    <div class="log-item reveal"><span class="k">Gen-AI</span><div class="t">Google Cloud Gen-AI competition<small>Ranked 663 overall.</small></div><span class="badge">Top 0.1%</span></div>
+    <div class="log-item reveal"><span class="k">2024</span><div class="t">AXIS-24 Hackathon<small>Team project recognised by the judges.</small></div><span class="badge">Honorable mention</span></div>
+    <div class="log-item reveal"><span class="k">IvLabs</span><div class="t">Mentor &amp; workshop lead<small>Mentored 15 sophomores across a voice-navigation robot, fixed-wing UAV and bipedal robot; ran IEEE workshops for freshmen.</small></div><span class="badge">15 mentees</span></div>
+    <div class="log-item reveal"><span class="k">School</span><div class="t">SOF'18 Gold · UNSW '16 · IMO '18<small>Olympiad roots. Also 94.6% in CBSE Class XII.</small></div><span class="badge">Gold</span></div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact">
+  <p class="sec-num reveal" style="margin-bottom:26px">06 · Say hello</p>
+  <h2 class="big-cta reveal">Let's build something<br>that <em>moves.</em></h2>
+  <button class="mail reveal" id="mailBtn">guptuv09@gmail.com <span class="cp">copy</span></button>
+  <div class="socials reveal">
+    <a href="https://github.com/guptuv" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/yuvraj-gupta11" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://linktr.ee/gupt_uv" target="_blank" rel="noopener">Linktree</a>
+    <a href="mailto:guptuv09@gmail.com">Email</a>
+  </div>
+</section>
+
+<footer><span>© <span id="yr"></span> Yuvraj Gupta</span><span>Press <b style="color:var(--accent)">/</b> for a terminal</span><span>Built by hand · no frameworks</span></footer>
+
+<div id="term"><div class="tw">
+  <div class="tw-bar"><i id="termClose"></i><i></i><i></i><span>yuvraj@ether:~</span></div>
+  <div class="tw-body" id="tout"></div>
+  <div class="tw-in"><span>❯</span><input id="tin" autocomplete="off" spellcheck="false" placeholder="type 'help'"></div>
+</div></div>
+<button class="motion-pill" id="motionPill" aria-pressed="false"><i></i><span>Tilt mode</span></button>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+$('#yr').textContent = new Date().getFullYear();
+
+/* ---------- loader ---------- */
+const msgs = ['Booting systems','Calibrating IMU','Spinning up rotors','Linking telemetry','Ready'];
+let pct = 0; const l0 = performance.now(), LDUR = reduce ? 100 : 1500;
+const lt = setInterval(() => {
+  pct = Math.min(100, Math.max(pct + Math.random()*6, (performance.now()-l0)/LDUR*100));
+  $('#lpct').textContent = String(Math.floor(pct)).padStart(3,'0');
+  $('#loader .lbar i').style.transform = `scaleX(${pct/100})`;
+  $('#lmsg').textContent = msgs[Math.min(msgs.length-1, Math.floor(pct/22))];
+  if (pct >= 100) { clearInterval(lt); setTimeout(() => { $('#loader').classList.add('done'); document.body.classList.add('ready'); }, 250); }
+}, reduce ? 10 : 55);
+
+/* ---------- cursor ---------- */
+const cur = $('.cursor'), dot = $('.cursor-dot');
+let mx = innerWidth/2, my = innerHeight/2, cx = mx, cy = my;
+addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`; });
+(function loopC(){ cx += (mx-cx)*.18; cy += (my-cy)*.18; cur.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`; requestAnimationFrame(loopC); })();
+document.addEventListener('mouseover', e => cur.classList.toggle('big', !!e.target.closest('a,button,.chip')));
+
+/* ---------- nav / progress / active ---------- */
+const secs = ['about','experience','projects','skills','log','contact'].map(id => document.getElementById(id));
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  $('#progress').style.width = (h.scrollTop/(h.scrollHeight-h.clientHeight)*100) + '%';
+  $('#nav').classList.toggle('scrolled', h.scrollTop > 40);
+  let act = null; secs.forEach(s => { if (s.getBoundingClientRect().top < innerHeight*.4) act = s.id; });
+  $$('nav ul a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+act));
+  timelineUpdate();
+}, {passive:true});
+
+/* ---------- reveal ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); if (e.target.classList.contains('stats')) countUp(); } }), {threshold:.15});
+$$('.reveal').forEach(el => io.observe(el));
+
+function countUp(){
+  $$('[data-count]').forEach(el => {
+    const to = +el.dataset.count, dec = +(el.dataset.dec||0), pre = el.dataset.pre||'', sup = el.querySelector('sup').outerHTML;
+    const t0 = performance.now(), d = 1600;
+    (function f(t){ const k = Math.min(1,(t-t0)/d), e = 1-Math.pow(1-k,3);
+      el.innerHTML = (pre?`<span style="font-size:.45em;color:var(--muted)">${pre}</span>`:'') + (to*e).toFixed(dec) + sup;
+      if (k<1) requestAnimationFrame(f); })(t0);
+  });
+}
+
+/* ---------- timeline rover ---------- */
+const tl = $('#timeline'), fill = $('#trackFill'), tbot = $('#tbot'), jobs = $$('.job');
+function timelineUpdate(){
+  const r = tl.getBoundingClientRect(), mid = innerHeight*.55;
+  const p = Math.max(0, Math.min(1, (mid - r.top) / (r.height - 40)));
+  const px = p * (r.height - 40);
+  fill.style.height = px + 'px'; tbot.style.top = px + 'px';
+  jobs.forEach(j => j.classList.toggle('lit', j.getBoundingClientRect().top < mid));
+}
+timelineUpdate();
+
+/* ---------- project tilt + spotlight ---------- */
+$$('.proj').forEach(c => {
+  c.addEventListener('mousemove', e => {
+    const r = c.getBoundingClientRect(), x = e.clientX-r.left, y = e.clientY-r.top;
+    c.style.setProperty('--mx', x+'px'); c.style.setProperty('--my', y+'px');
+    if (!reduce) c.style.transform = `perspective(900px) rotateX(${(y/r.height-.5)*-6}deg) rotateY(${(x/r.width-.5)*6}deg)`;
+  });
+  c.addEventListener('mouseleave', () => c.style.transform = '');
+});
+/* eyes follow cursor */
+const irises = $$('#eyes .iris');
+addEventListener('mousemove', e => irises.forEach(ir => {
+  const r = ir.parentNode.getBoundingClientRect(), ex = r.left+r.width/2, ey = r.top+r.height/2;
+  const a = Math.atan2(e.clientY-ey, e.clientX-ex), d = Math.min(1, Math.hypot(e.clientX-ex, e.clientY-ey)/300);
+  ir.setAttribute('transform', `translate(${Math.cos(a)*20*d},${Math.sin(a)*9*d})`);
+}));
+/* card rover drives along the terrain path */
+const rp = $('#roverPath'), rc = $('#roverCard'), rWheels = $$('#roverCard .wheel');
+if (rp && rc) {
+  const L = rp.getTotalLength(), WB = 24;            // half wheelbase
+  let s = L*.2, dir = 1, odo = 0, last = performance.now(), pause = 0;
+  (function drive(now){
+    const dt = Math.min(50, now - last); last = now;
+    // tilt from the line between the rear and front wheel contact points
+    const a = rp.getPointAtLength(Math.max(0, s - WB)), b = rp.getPointAtLength(Math.min(L, s + WB)), p = rp.getPointAtLength(s);
+    const ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+    if (pause > 0) pause -= dt;
+    else {
+      const uphill = (dir > 0) === (b.y < a.y);
+      const v = (uphill ? .035 : .06) * dt;          // slower climbing, faster descending
+      s += dir * v; odo += v;
+      if (s > L*.86) { s = L*.86; dir = -1; pause = 700; }
+      if (s < L*.12) { s = L*.12; dir = 1;  pause = 700; }
+    }
+    // mirror when reversing so the camera mast always faces the direction of travel
+    rc.setAttribute('transform', `translate(${p.x},${p.y + 0.75}) rotate(${ang}) scale(${dir},1)`);
+    rWheels.forEach(w => w.setAttribute('transform', `rotate(${odo / 8 * 57.3})`));
+    requestAnimationFrame(drive);
+  })(last);
+}
+/* fake sensor */
+const pts = Array.from({length:30}, () => 60);
+setInterval(() => {
+  const t = 24 + Math.sin(Date.now()/4000)*1.5 + (Math.random()-.5)*.3, h = 58 + Math.sin(Date.now()/6000)*4;
+  $('#tempTxt').textContent = t.toFixed(1)+'°C'; $('#humTxt').textContent = 'RH '+Math.round(h)+'%';
+  pts.shift(); pts.push(62 - (t-24)*12);
+  $('#spark').setAttribute('points', pts.map((v,i) => `${170+i*2.2},${v}`).join(' '));
+}, 600);
+
+/* ---------- marquee ---------- */
+const words = ['Node.js','robotics','MongoDB','SLAM','Docker','rovers','ROS','drones','Python','control','Unity','vision'];
+const html = words.map((w,i) => `<span>${w}</span><span class="star">✦</span>`).join('');
+$('#mrow').innerHTML = html + html;
+
+/* ---------- copy email ---------- */
+function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 1800); }
+$('#mailBtn').onclick = () => { navigator.clipboard?.writeText('guptuv09@gmail.com').then(() => toast('Email copied ✓'), () => location.href='mailto:guptuv09@gmail.com'); };
+
+/* ---------- clock ---------- */
+function tick(){ $('#clock').textContent = new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit'}); }
+tick(); setInterval(tick, 20000);
+
+/* =========================================================
+   HERO CANVAS — stars, forest terrain, rover + guiding drone
+   ========================================================= */
+/* ---------- theme + view ---------- */
+const root = document.documentElement;
+const store = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+const PALETTES = {
+  ember:  {name:'Ember · rover orange', a:'#ff8a3d', b:'#5ee6c8'},
+  ocean:  {name:'Ocean · sky blue',     a:'#4da3ff', b:'#ffd166'},
+  violet: {name:'Violet · night lab',   a:'#a78bfa', b:'#5ee6c8'},
+  rose:   {name:'Rose · sunset',        a:'#ff6b9a', b:'#7dd3fc'},
+  lime:   {name:'Lime · circuit board', a:'#a3e635', b:'#f472b6'},
+};
+const P = {};
+function readPalette(){
+  const s = getComputedStyle(root), v = n => s.getPropertyValue(n).trim();
+  Object.assign(P, {accent:v('--accent'), accent2:v('--accent2'), a:v('--accent-rgb'), a2:v('--accent2-rgb'),
+    text:v('--text'), dim:v('--dim'), wheel:v('--c-wheel'), ridge:v('--c-ridge'), tree1:v('--c-tree1'), tree2:v('--c-tree2'),
+    g1:v('--c-g1'), g2:v('--c-g2'), star:v('--c-star'), starA:parseFloat(v('--c-star-a')) || 1});
+}
+readPalette();
+const sysLight = matchMedia('(prefers-color-scheme: light)');
+function setTheme(pref){
+  if (!['dark','light','system'].includes(pref)) return false;
+  root.dataset.themePref = pref; store('yg-theme', pref);
+  root.setAttribute('data-theme', pref === 'system' ? (sysLight.matches ? 'light' : 'dark') : pref);
+  $$('#modeSeg button').forEach(b => b.classList.toggle('on', b.dataset.t === pref));
+  readPalette(); return true;
+}
+function setAccent(key){
+  if (!PALETTES[key]) return false;
+  root.setAttribute('data-accent', key); store('yg-accent', key);
+  $$('#swatches button').forEach(b => b.classList.toggle('on', b.dataset.c === key));
+  $('#swName').textContent = PALETTES[key].name;
+  readPalette(); return true;
+}
+sysLight.addEventListener?.('change', () => { if (root.dataset.themePref === 'system') setTheme('system'); });
+$('#swatches').innerHTML = Object.entries(PALETTES).map(([k,p]) =>
+  `<button data-c="${k}" title="${p.name}" aria-label="${p.name}" style="background:${p.a};--sw2:${p.b}"></button>`).join('');
+$$('#swatches button').forEach(b => b.onclick = () => setAccent(b.dataset.c));
+$$('#modeSeg button').forEach(b => b.onclick = () => setTheme(b.dataset.t));
+setTheme(root.dataset.themePref || 'dark'); setAccent(root.getAttribute('data-accent') || 'ember');
+const pop = $('#themePop'), tbtn = $('#themeBtn');
+tbtn.onclick = e => { e.stopPropagation(); const o = pop.classList.toggle('open'); tbtn.setAttribute('aria-expanded', o); };
+document.addEventListener('click', e => { if (!e.target.closest('#themePop')) { pop.classList.remove('open'); tbtn.setAttribute('aria-expanded', false); } });
+
+function setView(v, announce){
+  if (!['software','robotics'].includes(v)) return false;
+  root.setAttribute('data-view', v); store('yg-view', v);
+  $$('#viewSeg button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  $$('.vs').forEach(el => { el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); });
+  const u = new URL(location.href); u.searchParams.set('view', v); history.replaceState(null, '', u);
+  timelineUpdate();
+  if (announce) toast(v === 'robotics' ? 'Robotics side · rovers, UAVs, SLAM 🤖' : 'Software side · backend & systems 💻');
+  return true;
+}
+$$('#viewSeg button').forEach(b => b.onclick = () => setView(b.dataset.v, true));
+setView(root.getAttribute('data-view') || 'software');
+
+/* ---------- tilt mode: phone IMU makes boxes hang & swing like pendulums ---------- */
+const imu = { on: false, gamma: 0, ax: 0, userOff: false };
+const motionPill = $('#motionPill');
+const isTouch = matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+const hasIMU = typeof DeviceOrientationEvent !== 'undefined';
+const needsPerm = hasIMU && typeof DeviceOrientationEvent.requestPermission === 'function';   // iOS Safari
+let swingers = [], listening = false, swingT = 0;
+try { imu.userOff = localStorage.getItem('yg-tilt') === 'off'; } catch (e) {}
+
+function collectSwingers(){
+  swingers = $$('.proj, .sk, .stat, .chip, .tag, .socials a, .mail').map((el, i) => {
+    const small = el.matches('.chip, .tag, .socials a');
+    const f = small ? 1.1 + (i % 5) * .13 : .55 + (i % 4) * .09;          // natural frequency (Hz) — varied so they don't move in lockstep
+    el.style.transformOrigin = '50% 0';                                    // pivot at the top edge, like a hanging sign
+    return { el, th: 0, w: 0, k: (2*Math.PI*f) ** 2, c: 2 * .09 * 2*Math.PI*f, max: (small ? 24 : 7) * Math.PI/180, gain: small ? 1 : .35 };
+  });
+}
+function screenRoll(e){
+  const a = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+  return a === 90 ? e.beta : (a === -90 || a === 270) ? -e.beta : e.gamma;
+}
+function onOrient(e){
+  if (e.gamma == null) return;
+  imu.gamma = Math.max(-60, Math.min(60, screenRoll(e) || 0));
+  if (!imu.on && !imu.userOff) startImu(true);
+}
+function onMotion(e){ const a = e.acceleration; if (a && a.x != null) imu.ax = a.x; }
+function listen(){
+  if (listening) return; listening = true;
+  addEventListener('deviceorientation', onOrient);
+  addEventListener('devicemotion', onMotion);
+}
+function startImu(auto){
+  imu.on = true; imu.userOff = false;
+  try { localStorage.removeItem('yg-tilt'); } catch (e) {}
+  collectSwingers();
+  motionPill.classList.add('on'); motionPill.setAttribute('aria-pressed', 'true');
+  toast(auto ? 'Tilt mode on · tilt or shake your phone 📱' : 'Tilt your phone 📱');
+  swingT = performance.now(); requestAnimationFrame(swing);
+}
+function stopImu(){
+  imu.on = false; imu.userOff = true;
+  try { localStorage.setItem('yg-tilt', 'off'); } catch (e) {}
+  swingers.forEach(s => { s.el.style.rotate = ''; s.el.style.transformOrigin = ''; });
+  motionPill.classList.remove('on'); motionPill.setAttribute('aria-pressed', 'false');
+}
+function swing(now){
+  if (!imu.on) return;
+  const dt = Math.min(.05, (now - swingT) / 1000); swingT = now;
+  const phi = -imu.gamma * Math.PI/180;        // where real gravity points, in screen space
+  const kick = imu.ax * 2.5; imu.ax *= .85;     // a sideways jolt makes the bottom lag behind
+  for (const s of swingers) {
+    // damped pendulum: spring toward gravity + damping + jolt
+    const acc = -s.k * (s.th - phi * s.gain) - s.c * s.w + kick * s.gain;
+    s.w += acc * dt; s.th += s.w * dt;
+    if (s.th >  s.max) { s.th =  s.max; s.w *= -.4; }
+    if (s.th < -s.max) { s.th = -s.max; s.w *= -.4; }
+    s.el.style.rotate = (s.th * 180/Math.PI).toFixed(2) + 'deg';
+  }
+  requestAnimationFrame(swing);
+}
+if (hasIMU && isTouch && !reduce) {
+  motionPill.classList.add('show');
+  if (!needsPerm) listen();                     // Android: no permission needed, starts on first reading
+  motionPill.onclick = async () => {
+    if (imu.on) { stopImu(); toast('Tilt mode off'); return; }
+    if (needsPerm) {
+      try {
+        const r = await DeviceOrientationEvent.requestPermission();
+        if (r !== 'granted') { toast('Motion access was not allowed'); return; }
+        DeviceMotionEvent.requestPermission?.().catch(() => {});
+      } catch (e) { toast('Motion sensors need the site on https'); return; }
+    }
+    listen(); startImu(false);
+  };
+}
+
+const cv = $('#sky'), ctx = cv.getContext('2d');
+let W, H, DPR, stars = [], trees = [];
+let seed = 7; const rnd = () => (seed = (seed*16807)%2147483647, (seed-1)/2147483646);
+function ground(x){ return H - Math.min(150, H*.2) + Math.sin(x*.0042+1)*26 + Math.sin(x*.011)*9 + Math.sin(x*.023+2)*3; }
+function resize(){
+  DPR = Math.min(2, devicePixelRatio||1); W = cv.clientWidth; H = cv.clientHeight;
+  cv.width = W*DPR; cv.height = H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+  seed = 7;
+  stars = Array.from({length: Math.round(W*H/2600)}, () => ({x:rnd()*W, y:rnd()*H*.85, r:rnd()*1.2+.2, z:rnd()*.8+.2, tw:rnd()*6}));
+  trees = []; for (let x = 10; x < W; x += 14 + rnd()*36) if (rnd() > .35) trees.push({x, h: 18 + rnd()*30, d: rnd()});
+}
+resize(); addEventListener('resize', resize);
+
+const rover = {x: 0, v: 0, target: null, wheel: 0};
+const drone = {x: 0, y: 0, vx: 0};
+const flags = [];
+let hmx = null, hmy = null, lastMove = 0, shooting = null, t = 0;
+rover.x = innerWidth*.3; drone.x = rover.x; drone.y = innerHeight*.35;
+const hero = $('#hero');
+hero.addEventListener('mousemove', e => { const r = cv.getBoundingClientRect(); hmx = e.clientX-r.left; hmy = e.clientY-r.top; lastMove = performance.now(); });
+hero.addEventListener('mouseleave', () => hmx = null);
+hero.addEventListener('click', e => {
+  if (e.target.closest('button,a')) return;
+  const r = cv.getBoundingClientRect(), x = e.clientX - r.left;
+  flags.push({x, born: t}); if (flags.length > 4) flags.shift();
+  toast('Waypoint set · x = ' + Math.round(x) + ' m');
+});
+
+function drawTree(x, h, shade){
+  const y = ground(x) + 4;
+  ctx.fillStyle = shade;
+  ctx.beginPath(); ctx.moveTo(x, y-h); ctx.lineTo(x-h*.28, y-h*.35); ctx.lineTo(x-h*.12, y-h*.38); ctx.lineTo(x-h*.34, y); ctx.lineTo(x+h*.34, y); ctx.lineTo(x+h*.12, y-h*.38); ctx.lineTo(x+h*.28, y-h*.35); ctx.closePath(); ctx.fill();
+}
+function drawRover(x, ang){
+  const y = ground(x);
+  ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+  // wheels
+  [-22,0,22].forEach(wx => {
+    ctx.save(); ctx.translate(wx, -7);
+    ctx.fillStyle = P.wheel; ctx.strokeStyle = P.text; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.arc(0,0,7,0,7); ctx.fill(); ctx.stroke();
+    ctx.rotate(rover.wheel); ctx.beginPath(); ctx.moveTo(-6,0); ctx.lineTo(6,0); ctx.moveTo(0,-6); ctx.lineTo(0,6); ctx.strokeStyle=P.dim; ctx.lineWidth=1; ctx.stroke();
+    ctx.restore();
+  });
+  // rocker-bogie
+  ctx.strokeStyle = P.text; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(-22,-7); ctx.lineTo(-10,-18); ctx.lineTo(0,-7); ctx.moveTo(-10,-18); ctx.lineTo(22,-7); ctx.stroke();
+  // body
+  ctx.fillStyle = P.accent; ctx.beginPath(); ctx.roundRect(-24,-30,46,11,3); ctx.fill();
+  ctx.fillStyle = P.dim; ctx.fillRect(-20,-26,12,3);
+  // solar panel
+  ctx.fillStyle = P.dim; ctx.fillRect(-26,-33,30,3);
+  // mast + camera
+  ctx.beginPath(); ctx.moveTo(14,-30); ctx.lineTo(14,-46); ctx.stroke();
+  ctx.fillStyle = P.text; ctx.beginPath(); ctx.roundRect(9,-52,13,7,2); ctx.fill();
+  ctx.fillStyle = P.accent2; ctx.beginPath(); ctx.arc(20,-48.5,1.8,0,7); ctx.fill();
+  // antenna blink
+  ctx.beginPath(); ctx.moveTo(-18,-30); ctx.lineTo(-18,-42); ctx.stroke();
+  ctx.fillStyle = (Math.floor(t/30)%2) ? P.accent : P.dim; ctx.beginPath(); ctx.arc(-18,-43,2,0,7); ctx.fill();
+  ctx.restore();
+}
+function drawDrone(x, y, tilt){
+  ctx.save(); ctx.translate(x, y); ctx.rotate(tilt);
+  ctx.strokeStyle = P.text; ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(-24,0); ctx.lineTo(24,0); ctx.stroke();
+  [-24,24].forEach(px => {
+    ctx.beginPath(); ctx.moveTo(px,0); ctx.lineTo(px,-4); ctx.stroke();
+    const w = 11 * Math.abs(Math.sin(t*.9 + px));
+    ctx.fillStyle = P.dim; ctx.beginPath(); ctx.ellipse(px,-5,w+3,1.6,0,0,7); ctx.fill();
+  });
+  ctx.fillStyle = P.accent2; ctx.beginPath(); ctx.roundRect(-9,-4,18,8,3); ctx.fill();
+  ctx.fillStyle = P.g2; ctx.fillRect(-3,4,6,3);
+  ctx.fillStyle = (Math.floor(t/20)%2) ? '#ff3d3d' : '#401010'; ctx.beginPath(); ctx.arc(-24,2,1.6,0,7); ctx.fill();
+  ctx.restore();
+}
+
+function frame(){
+  t++;
+  ctx.clearRect(0,0,W,H);
+  // sky glow
+  const g = ctx.createRadialGradient(W*.5, H*1.05, 10, W*.5, H*1.05, H*.9);
+  g.addColorStop(0,`rgba(${P.a},.16)`); g.addColorStop(.5,`rgba(${P.a2},.03)`); g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+  // stars w/ parallax
+  const ox = hmx==null ? 0 : (hmx - W/2)*.02, oy = hmy==null ? 0 : (hmy - H/2)*.02;
+  stars.forEach(s => {
+    const a = .35 + .65*Math.abs(Math.sin(t*.012 + s.tw));
+    ctx.globalAlpha = a*s.z; ctx.globalAlpha *= P.starA; ctx.fillStyle = `rgb(${P.star})`;
+    ctx.beginPath(); ctx.arc(s.x - ox*s.z, s.y - oy*s.z, s.r, 0, 7); ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  // shooting star
+  if (!shooting && Math.random() < .004) shooting = {x: Math.random()*W*.8, y: Math.random()*H*.3, l: 0};
+  if (shooting) {
+    shooting.l += 1;
+    const sx = shooting.x + shooting.l*9, sy = shooting.y + shooting.l*3.5;
+    const lg = ctx.createLinearGradient(sx-90, sy-35, sx, sy); lg.addColorStop(0,'rgba(0,0,0,0)'); lg.addColorStop(1,`rgba(${P.star},.8)`);
+    ctx.strokeStyle = lg; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(sx-90, sy-35); ctx.lineTo(sx, sy); ctx.stroke();
+    if (shooting.l > 40) shooting = null;
+  }
+
+  // far ridge
+  ctx.fillStyle = P.ridge; ctx.beginPath(); ctx.moveTo(0,H);
+  for (let x = 0; x <= W; x += 8) ctx.lineTo(x, ground(x*1.3+400) - 70 + Math.sin(x*.002)*30 - ox*.5);
+  ctx.lineTo(W,H); ctx.fill();
+  // back trees
+  trees.forEach(tr => { if (tr.d < .5) drawTree(tr.x, tr.h*.8, P.tree1); });
+
+  // ground
+  ctx.beginPath(); ctx.moveTo(0,H);
+  for (let x = 0; x <= W; x += 4) ctx.lineTo(x, ground(x));
+  ctx.lineTo(W,H); ctx.closePath();
+  const gg = ctx.createLinearGradient(0, H-200, 0, H); gg.addColorStop(0,P.g1); gg.addColorStop(1,P.g2);
+  ctx.fillStyle = gg; ctx.fill();
+  ctx.strokeStyle = `rgba(${P.a},.55)`; ctx.lineWidth = 1.2; ctx.beginPath();
+  for (let x = 0; x <= W; x += 4) x ? ctx.lineTo(x, ground(x)) : ctx.moveTo(x, ground(x)); ctx.stroke();
+  // contour lines
+  for (let k = 1; k < 5; k++) {
+    ctx.strokeStyle = `rgba(${P.a2},${.09 - k*.015})`; ctx.lineWidth = 1; ctx.beginPath();
+    for (let x = 0; x <= W; x += 6) { const y = ground(x) + k*18 + Math.sin(x*.01 + k)*4; x ? ctx.lineTo(x,y) : ctx.moveTo(x,y); }
+    ctx.stroke();
+  }
+
+  // decide target
+  const now = performance.now();
+  if (flags.length) rover.target = flags[0].x;
+  else if (imu.on) rover.target = W/2 + Math.max(-1, Math.min(1, imu.gamma/30)) * W * .45;   // tilt the phone to drive
+  else if (hmx != null && now - lastMove < 2500) rover.target = hmx;
+  else rover.target = W*.5 + Math.sin(t*.004)*W*.32;
+
+  // flags
+  flags.forEach((f,i) => {
+    const fy = ground(f.x), pop = Math.min(1, (t - f.born)/15);
+    ctx.strokeStyle = i===0 ? P.accent2 : P.dim; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(f.x, fy); ctx.lineTo(f.x, fy - 34*pop); ctx.stroke();
+    ctx.fillStyle = i===0 ? P.accent2 : P.dim;
+    ctx.beginPath(); ctx.moveTo(f.x, fy-34*pop); ctx.lineTo(f.x+14*pop, fy-29*pop); ctx.lineTo(f.x, fy-24*pop); ctx.fill();
+    ctx.strokeStyle = `rgba(${P.a2},.4)`; ctx.beginPath(); ctx.ellipse(f.x, fy, 10 + Math.sin(t*.1)*3, 3, 0, 0, 7); ctx.stroke();
+  });
+
+  // rover physics
+  const dx = rover.target - rover.x;
+  const slope = Math.atan2(ground(rover.x+12) - ground(rover.x-12), 24);
+  const vmax = 2.4 * (1 - Math.abs(slope)*.6);
+  rover.v += (Math.max(-vmax, Math.min(vmax, dx*.03)) - rover.v) * .06;
+  rover.x += rover.v; rover.wheel += rover.v/7;
+  if (flags.length && Math.abs(flags[0].x - rover.x) < 4) { flags.shift(); toast('Waypoint reached ✓'); }
+
+  // drone follows rover, scouting slightly ahead
+  const ahead = rover.x + Math.sign(rover.v||1)*60;
+  const dty = Math.max(ground(ahead) - 115, H*.6) + Math.sin(t*.03)*6 + (hmy!=null && now-lastMove<2500 ? (hmy - H*.5)*.08 : 0);
+  drone.vx += ((ahead - drone.x)*.02 - drone.vx)*.08; drone.x += drone.vx;
+  drone.y += (dty - drone.y)*.04;
+
+  // scan cone + telemetry link
+  const ry = ground(rover.x) - 30;
+  ctx.fillStyle = `rgba(${P.a2},.05)`;
+  ctx.beginPath(); ctx.moveTo(drone.x, drone.y+6); ctx.lineTo(drone.x-55, ground(drone.x-55)); ctx.lineTo(drone.x+55, ground(drone.x+55)); ctx.closePath(); ctx.fill();
+  ctx.setLineDash([3,6]); ctx.lineDashOffset = -t*.6;
+  ctx.strokeStyle = `rgba(${P.a2},.6)`; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(drone.x, drone.y+6); ctx.lineTo(rover.x+14, ry-20); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // front trees (rover passes in front of back trees but behind none)
+  trees.forEach(tr => { if (tr.d >= .5 && Math.abs(tr.x - rover.x) > 30) drawTree(tr.x, tr.h*.55, P.tree2); });
+
+  drawRover(rover.x, slope);
+  drawDrone(drone.x, drone.y, Math.max(-.35, Math.min(.35, drone.vx*.08)));
+
+  // HUD
+  if (t % 6 === 0) {
+    $('#hx').textContent = String(Math.round(Math.max(0,rover.x))).padStart(4,'0');
+    $('#hs').textContent = String(Math.round(Math.abs(slope*180/Math.PI))).padStart(2,'0');
+    $('#hv').textContent = Math.abs(rover.v*2).toFixed(1);
+    $('#ha').textContent = String(Math.max(0, Math.round(ground(drone.x) - drone.y))).padStart(3,'0');
+  }
+  if (heroVisible) requestAnimationFrame(frame); else running = false;
+}
+let heroVisible = true, running = false;
+function start(){ if (!running) { running = true; requestAnimationFrame(frame); } }
+new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; if (heroVisible) start(); }).observe(hero);
+start();
+
+/* =========================================================
+   TERMINAL
+   ========================================================= */
+const term = $('#term'), out = $('#tout'), inp = $('#tin');
+const hist = []; let hi = 0;
+const print = h => { out.insertAdjacentHTML('beforeend', `<div>${h}</div>`); out.scrollTop = out.scrollHeight; };
+const go = id => { closeTerm(); setTimeout(() => document.getElementById(id).scrollIntoView({behavior:'smooth'}), 150); };
+const cmds = {
+  help: () => print(`<span class="m">available commands:</span><br>
+  <span class="a">whoami</span>      who is this guy<br>
+  <span class="a">now</span>         what I'm working on<br>
+  <span class="a">experience</span>  jump to work &amp; research<br>
+  <span class="a">projects</span>    jump to projects<br>
+  <span class="a">skills</span>      list my toolkit<br>
+  <span class="a">contact</span>     ways to reach me<br>
+  <span class="a">rover</span>       send the rover somewhere random<br>
+  <span class="a">view</span> software|robotics<br>
+  <span class="a">theme</span> dark|light|auto<br>
+  <span class="a">color</span> ember|ocean|violet|rose|lime<br>
+  <span class="a">clear</span> · <span class="a">exit</span>`),
+  whoami: () => print('Yuvraj Gupta — Software Engineer at Ether, Mumbai. Mechanical engineer (VNIT Nagpur) turned backend dev, with a past life in rovers, drones and SLAM.'),
+  now: () => print('Building <span class="a">ether-be</span>: Node.js · MongoDB · Docker. Schemas → services → APIs → transformers → frontend.'),
+  experience: () => go('experience'), projects: () => go('projects'), about: () => go('about'), log: () => go('log'),
+  skills: () => print('lang   : Python, C/C++, Java, Node.js<br>robots : ROS, Gazebo, PX4, ArduPilot, Unity<br>infra  : Docker, MongoDB, Git<br>libs   : OpenCV, TensorFlow, MediaPipe, Matplotlib'),
+  contact: () => print('email    <a href="mailto:guptuv09@gmail.com">guptuv09@gmail.com</a><br>github   <a href="https://github.com/guptuv" target="_blank">github.com/guptuv</a><br>linkedin <a href="https://www.linkedin.com/in/yuvraj-gupta11" target="_blank">in/yuvraj-gupta11</a>'),
+  rover: () => { flags.push({x: 40 + Math.random()*(W-80), born: t}); print('waypoint dispatched → close the terminal and watch the hero 🚙'); },
+  sudo: a => print(a.join(' ').includes('hire') ? '<span class="a">permission granted.</span> → <a href="mailto:guptuv09@gmail.com">guptuv09@gmail.com</a>' : 'nice try.'),
+  view: a => print(setView(a[0], true) ? `switched to the <span class="a">${a[0]}</span> side` : 'usage: view software|robotics'),
+  theme: a => { const p = a[0] === 'auto' ? 'system' : a[0]; print(setTheme(p) ? `theme → <span class="a">${a[0]}</span>` : 'usage: theme dark|light|auto'); },
+  color: a => print(setAccent(a[0]) ? `accent → <span class="a">${a[0]}</span>` : 'usage: color ' + Object.keys(PALETTES).join('|')),
+  ls: () => print('about/  experience/  projects/  skills/  log/  contact/'),
+  clear: () => out.innerHTML = '', exit: () => closeTerm(),
+};
+function openTerm(){ term.classList.add('open'); if (!out.innerHTML) print('<span class="m">yuvraj-os v2026.11 · type</span> <span class="a">help</span> <span class="m">to begin</span>'); setTimeout(() => inp.focus(), 50); }
+function closeTerm(){ term.classList.remove('open'); inp.blur(); }
+$('#termBtn').onclick = openTerm; $('#termClose').onclick = closeTerm;
+term.addEventListener('click', e => { if (e.target === term) closeTerm(); });
+addEventListener('keydown', e => {
+  if (e.key === '/' && !term.classList.contains('open') && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); openTerm(); }
+  else if (e.key === 'Escape') closeTerm();
+});
+inp.addEventListener('keydown', e => {
+  if (e.key === 'ArrowUp' && hist.length) { hi = Math.max(0, hi-1); inp.value = hist[hi]; e.preventDefault(); }
+  if (e.key === 'ArrowDown' && hist.length) { hi = Math.min(hist.length, hi+1); inp.value = hist[hi]||''; }
+  if (e.key !== 'Enter') return;
+  const v = inp.value.trim(); inp.value = ''; if (!v) return;
+  hist.push(v); hi = hist.length;
+  print(`<span class="p">❯</span> ${v.replace(/</g,'&lt;')}`);
+  const [c, ...args] = v.toLowerCase().split(/\s+/);
+  (cmds[c] || (() => print(`command not found: ${c.replace(/</g,'&lt;')} — try <span class="a">help</span>`)))(args);
+});
+})();
+</script>
+</body>
+</html>
